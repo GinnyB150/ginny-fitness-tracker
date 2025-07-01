@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { format, parseISO, compareDesc } from "date-fns";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "./firebase";
 
 const initialExercises = [
   "Leg Press",
@@ -120,6 +122,28 @@ export default function App() {
         }}
       />
 
+<button
+  style={{
+    backgroundColor: "#38a169",
+    color: "white",
+    padding: "0.5rem 1rem",
+    border: "none",
+    borderRadius: "6px",
+    marginBottom: "1rem",
+    display: "block"
+  }}
+  onClick={async () => {
+    try {
+      await setDoc(doc(db, "workouts", selectedDate), workouts[selectedDate]);
+      alert("Workout saved to the cloud!");
+    } catch (err) {
+      console.error("Save failed", err);
+      alert("Something went wrong saving to the cloud.");
+    }
+  }}
+>
+  Save Workout
+</button>
       <button
         style={{ backgroundColor: '#d6336c', color: 'white', padding: '0.5rem 1rem', border: 'none', borderRadius: '6px' }}
         onClick={() => alert("Progress tracking coming soon!")}
